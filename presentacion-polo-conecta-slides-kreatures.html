@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>POLO CONECTA · KREATURES — slides</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#002840;
+    --bg-deep:#001a2c;
+    --panel:rgba(252,191,73,.05);
+    --line:#FCBF49;
+    --line-dim:rgba(252,191,73,.35);
+    --ink:#F3EFE0;
+    --ink-dim:rgba(243,239,224,.68);
+    --ink-faint:rgba(243,239,224,.4);
+    --serif:"Playfair Display",Georgia,serif;
+    --mono:"Space Mono",Consolas,monospace;
+    --amber:#FCBF49;
+    --teal:#34E0D8;
+    --salmon:#FF6B6B;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%;overflow:hidden;background:var(--bg-deep)}
+  body{
+    color:var(--ink);font-family:var(--mono);
+    -webkit-font-smoothing:antialiased;
+  }
+  #constellation{position:fixed;inset:0;z-index:0;opacity:.55;pointer-events:none}
+
+  /* ---------- deck ---------- */
+  .deck{position:fixed;inset:0;z-index:2}
+  .slide{
+    position:absolute;inset:0;padding:56px 7vw 84px;
+    display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;
+    opacity:0;pointer-events:none;transform:translateX(6%);transition:opacity .55s ease,transform .55s ease;
+  }
+  .slide.cur{opacity:1;pointer-events:auto;transform:none}
+  .slide.leave-back{opacity:0;transform:translateX(-6%)}
+  .slide.leave-fwd{opacity:0;transform:translateX(6%)}
+
+  /* ---------- shared atoms ---------- */
+  .kicker{
+    font-family:var(--mono);font-size:clamp(11px,1.6vw,15px);letter-spacing:.42em;
+    text-transform:uppercase;color:var(--accent,var(--amber));
+    display:inline-flex;align-items:center;gap:14px;margin-bottom:30px;
+  }
+  .kicker::before,.kicker::after{content:"";height:1px;width:34px;background:var(--accent,var(--amber))}
+  h1,h2{font-family:var(--serif)}
+  .display{
+    font-size:clamp(44px,8vw,104px);font-weight:900;line-height:.98;letter-spacing:-.015em;
+    font-style:italic;
+  }
+  .display .accent{color:var(--accent,var(--amber));font-style:italic}
+  .sub{font-family:var(--mono);color:var(--ink-dim);font-size:clamp(13px,1.8vw,18px);max-width:760px;line-height:1.8;margin-top:22px}
+  .tag-row{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin-top:34px}
+  .chip{
+    font-family:var(--mono);font-size:11.5px;letter-spacing:.18em;text-transform:uppercase;
+    border:1px solid var(--line-dim);padding:9px 16px;border-radius:999px;color:var(--ink-dim);
+  }
+  .chip b{color:var(--accent,var(--amber));font-weight:700}
+  .slide-left{justify-content:center;align-items:flex-start;text-align:left}
+  .slide-left .kicker::before{display:none}
+  .slide-left .kicker::after{width:60px}
+  .slide-left .sub{max-width:680px}
+
+  /* ============ 0 · PORTADA ============ */
+  .cover .orb{position:relative;width:clamp(150px,22vw,230px);height:clamp(150px,22vw,230px);margin-bottom:38px}
+  .cover .ring{position:absolute;inset:0;border-radius:50%;border:1px solid var(--amber);opacity:.75}
+  .cover .r1{animation:spin 26s linear infinite}
+  .cover .r2{animation:spin 19s linear infinite reverse}
+  .cover .r1::after{content:"";position:absolute;inset:14%;border-radius:50%;border:1px dashed rgba(252,191,73,.5)}
+  .cover .r2::after{content:"";position:absolute;inset:27%;border-radius:50%;border:1px dotted rgba(52,224,216,.7)}
+  .cover .r3{animation:spin 11s linear infinite}
+  .cover .core{
+    position:absolute;inset:0;border-radius:50%;
+    background:radial-gradient(circle at 50% 45%,rgba(252,191,73,.95) 0%,rgba(252,191,73,.22) 40%,transparent 70%);
+    mix-blend-mode:screen;
+  }
+  .cover .pupil{
+    position:absolute;top:38%;left:50.5%;width:26%;height:26%;transform:translate(-50%,-50%);
+    border-radius:50%;background:radial-gradient(circle at 34% 30%,#fff 0%,rgba(243,239,224,.95) 22%,#002840 78%);
+    box-shadow:0 0 44px rgba(252,191,73,.7);
+  }
+  .cover .sat{
+    position:absolute;width:14px;height:14px;border-radius:50%;
+    background:var(--teal);box-shadow:0 0 14px var(--teal);top:50%;left:50%;animation:orbit 14s linear infinite;
+    transform-origin:0 0;
+  }
+  @keyframes spin{to{transform:rotate(360deg)}}
+  @keyframes orbit{
+    0%{transform:rotate(0deg) translateX(clamp(75px,11vw,115px))}
+    100%{transform:rotate(360deg) translateX(clamp(75px,11vw,115px))}
+  }
+  .cover .brand-line{font-family:var(--mono);font-size:11px;letter-spacing:.5em;color:var(--ink-faint);margin-bottom:12px}
+  @keyframes twitch{0%,90%,100%{transform:rotate(0)}92%{transform:rotate(-5deg)}94%{transform:rotate(4deg)}96%{transform:rotate(-2deg)}}
+
+  /* ============ 1 · PROBLEMA ============ */
+  .versus{display:flex;align-items:stretch;justify-content:center;gap:0;margin-top:36px;width:min(880px,92%)}
+  .v-col{border:1px solid var(--line-dim);border-radius:6px;padding:26px 26px;flex:1;min-width:0}
+  .v-hard{background:rgba(255,107,107,.05);border-color:rgba(255,107,107,.4)}
+  .v-easy{background:var(--panel);border-color:var(--line-dim)}
+  .v-col h3{font-family:var(--serif);font-style:italic;font-size:clamp(20px,3vw,34px);margin-bottom:16px}
+  .v-hard h3{color:var(--salmon)}
+  .v-easy h3{color:var(--accent,var(--amber))}
+  .v-col li{list-style:none;text-align:left;font-size:clamp(12px,1.5vw,15px);color:var(--ink-dim);line-height:1.7;padding-left:22px;position:relative;margin-bottom:10px}
+  .v-hard li::before{content:"✕";position:absolute;left:0;color:var(--salmon)}
+  .v-easy li::before{content:"✓";position:absolute;left:0;color:var(--accent,var(--amber))}
+  .v-mid{display:flex;flex-direction:column;justify-content:center;align-items:center;padding:0 18px;font-family:var(--serif);font-size:30px;color:var(--accent,var(--amber))}
+  .origin-note{margin-top:26px;font-family:var(--mono);font-size:11.5px;letter-spacing:.14em;color:var(--ink-faint);text-transform:uppercase}
+
+  /* ============ 2 · FASE 1 ============ */
+  .timeline{display:flex;flex-direction:column;gap:0;width:min(860px,94%);margin-top:34px;position:relative}
+  .tl-item{display:flex;gap:26px;text-align:left;padding:20px 0;border-bottom:1px solid var(--line-dim);position:relative}
+  .tl-item:last-child{border-bottom:0}
+  .tl-item .lbl{flex:0 0 150px;font-family:var(--mono);font-size:12px;letter-spacing:.12em;color:var(--accent,var(--amber));padding-top:6px;text-transform:uppercase}
+  .tl-item .body{flex:1}
+  .tl-item h3{font-family:var(--serif);font-style:italic;font-size:clamp(20px,2.8vw,30px);font-weight:700}
+  .tl-item p{color:var(--ink-dim);font-size:clamp(12px,1.6vw,15px);line-height:1.7;margin-top:8px;font-family:var(--mono)}
+  .tl-item .out{display:inline-block;margin-top:12px;font-size:11px;letter-spacing:.12em;color:var(--teal);border:1px dashed rgba(52,224,216,.4);padding:7px 12px;text-transform:uppercase}
+  @media(max-width:720px){.tl-item{flex-direction:column;gap:8px}.tl-item .lbl{flex:auto}}
+
+  /* ============ 3 · FASE 2 ============ */
+  .phases{display:flex;gap:20px;width:min(980px,96%);margin-top:34px;justify-content:center}
+  .phase-card{flex:1;border:1px solid var(--line-dim);border-radius:8px;padding:26px 22px;background:var(--panel);position:relative;text-align:left;transition:transform .3s,box-shadow .3s}
+  .phase-card:hover{transform:translateY(-6px);box-shadow:0 18px 40px rgba(0,0,0,.35),0 0 0 1px var(--line)}
+  .phase-card .pnum{font-family:var(--mono);font-size:12px;letter-spacing:.2em;color:var(--accent,var(--amber))}
+  .phase-card h3{font-family:var(--serif);font-style:italic;font-size:clamp(18px,2.4vw,26px);margin:10px 0 12px}
+  .phase-card li{list-style:none;font-size:clamp(11px,1.4vw,13.5px);color:var(--ink-dim);line-height:1.75;padding-left:18px;position:relative}
+  .phase-card li::before{content:"▹";position:absolute;left:0;color:var(--teal)}
+  .phase-card .price{margin-top:16px;font-family:var(--mono);font-weight:700;color:var(--accent,var(--amber))}
+  .phase-card .price small{color:var(--ink-faint);font-weight:400}
+  .phase-card.c1{--accent:var(--teal)}
+  .phase-card.c2{--accent:var(--amber)}
+  .phase-card.c3{--accent:var(--salmon)}
+  @media(max-width:760px){.phases{flex-direction:column}}
+
+  /* ============ 4 · ENTREGABLES ============ */
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px;width:min(900px,94%);margin-top:34px}
+  .g-card{border:1px solid var(--line-dim);border-radius:8px;padding:24px;text-align:left;background:var(--panel)}
+  .g-card .g-ico{font-family:var(--serif);font-style:italic;font-size:34px;color:var(--accent,var(--amber));border-bottom:1px solid var(--line-dim);padding-bottom:12px;margin-bottom:14px}
+  .g-card h3{font-family:var(--serif);font-style:italic;font-size:clamp(18px,2.4vw,26px);margin-bottom:8px}
+  .g-card p{font-size:clamp(11.5px,1.4vw,14px);color:var(--ink-dim);line-height:1.7}
+  .g-card:nth-child(1){--accent:var(--teal)}
+  .g-card:nth-child(2){--accent:var(--amber)}
+  .g-card:nth-child(3){--accent:var(--salmon)}
+  .g-card:nth-child(4){--accent:var(--teal)}
+  @media(max-width:760px){.grid2{grid-template-columns:1fr}}
+
+  /* ============ 5 · PRESUPUESTO ============ */
+  .budget{width:min(880px,94%);margin-top:30px;display:flex;flex-direction:column;gap:14px}
+  .brow{display:flex;align-items:baseline;gap:18px;text-align:left;border-bottom:1px solid var(--line-dim);padding-bottom:12px}
+  .brow:last-of-type{border-bottom:0}
+  .brow .f{flex:0 0 120px;font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;color:var(--accent,var(--amber));text-transform:uppercase}
+  .brow .d{flex:1;font-family:var(--serif);font-style:italic;font-size:clamp(15px,2vw,20px)}
+  .brow .v{font-family:var(--mono);font-size:clamp(15px,2vw,20px);font-weight:700}
+  .brow.total{border-top:1px solid var(--amber);border-bottom:0;padding-top:14px;align-items:center}
+  .brow.total .d{font-size:clamp(18px,2.6vw,26px)}
+  .brow.total .v{color:var(--accent,var(--amber));font-size:clamp(22px,3vw,34px)}
+  .budget-note{margin-top:24px;font-size:11.5px;letter-spacing:.12em;color:var(--ink-faint);text-transform:uppercase}
+  .pay-row{display:flex;gap:26px;justify-content:center;margin-top:26px}
+  .pay-box{border:1px solid var(--line-dim);border-radius:6px;padding:14px 22px;font-family:var(--mono);font-size:12px;color:var(--ink-dim)}
+  .pay-box b{color:var(--accent,var(--amber));font-size:16px;display:block;margin-bottom:4px}
+
+  /* ============ 6 · CIERRE ============ */
+  .cta-line{font-family:var(--serif);font-style:italic}
+  .steps{display:flex;gap:14px;justify-content:center;margin-top:34px;flex-wrap:wrap}
+  .step-chip{border:1px solid var(--line-dim);border-radius:999px;padding:10px 18px;font-size:11.5px;letter-spacing:.14em;color:var(--ink-dim);text-transform:uppercase}
+  .step-chip b{color:var(--accent,var(--amber))}
+
+  /* ---------- chrome ---------- */
+  .deck-top{position:fixed;top:0;left:0;right:0;z-index:6;display:flex;justify-content:space-between;align-items:center;padding:20px 34px;pointer-events:none}
+  .deck-top .brand{display:flex;align-items:center;gap:10px;font-family:var(--mono);font-size:12px;letter-spacing:.3em}
+  .deck-top .brand i{font-style:normal;color:var(--amber);font-size:16px}
+  .deck-top .steps-label{font-family:var(--mono);font-size:11px;letter-spacing:.22em;color:var(--ink-faint);text-transform:uppercase}
+  .deck-bottom{position:fixed;bottom:0;left:0;right:0;z-index:6;display:flex;align-items:center;gap:22px;padding:18px 34px;pointer-events:none}
+  .pager{display:flex;gap:8px}
+  .pager span{width:26px;height:3px;background:rgba(243,239,224,.18);border-radius:2px;transition:background .3s}
+  .pager span.on{background:var(--amber)}
+  .deck-nav{pointer-events:auto;display:flex;gap:10px;margin-left:auto}
+  .nav-btn{
+    width:44px;height:44px;border-radius:50%;border:1px solid var(--line-dim);cursor:pointer;
+    background:transparent;color:var(--ink);font-size:16px;transition:background .2s,border-color .2s;font-family:var(--mono);
+  }
+  .nav-btn:hover{border-color:var(--amber);background:rgba(252,191,73,.12)}
+  .hint{font-family:var(--mono);font-size:10px;letter-spacing:.18em;color:var(--ink-faint);text-transform:uppercase}
+  .progress{
+    position:fixed;top:0;left:0;right:0;height:3px;background:rgba(252,191,73,.25);z-index:7;
+    transform:scaleX(0);transform-origin:left;transition:transform .4s ease;
+  }
+
+  @media(max-width:760px){
+    .hint{display:none}
+    .deck-bottom{padding:14px 20px}
+  }
+</style>
+</head>
+<body>
+
+<canvas id="constellation"></canvas>
+
+<div class="progress" id="progress"></div>
+
+<!-- ================= SLIDES ================= -->
+<section class="deck" id="deck">
+
+  <!-- 0 · PORTADA -->
+  <article class="slide cover cur" data-title="Portada">
+    <div class="orb">
+      <div class="ring r1"></div>
+      <div class="ring r2"></div>
+      <div class="ring r3 core"></div>
+      <div class="pupil" style="animation:twitch 6s ease-in-out infinite"></div>
+      <div class="sat"></div>
+    </div>
+    <div class="brand-line">KREATURES · ESTUDIO DE CONTENIDOS</div>
+    <span class="kicker">Polo Nacional de Contenidos Digitales</span>
+    <h1 class="display">POLO <span class="accent">CONECTA</span></h1>
+    <p class="sub">Nace de un Reto Polo en Summer Polo. El talento ya está en el edificio — solo falta juntarlo para construir algo propio.</p>
+    <div class="tag-row">
+      <span class="chip">Octubre → Diciembre <b>2026</b></span>
+      <span class="chip">Del mapa 2D al edificio <b>3D</b></span>
+      <span class="chip">Un robot como <b>prototipo</b></span>
+    </div>
+  </article>
+
+  <!-- 1 · CONTEXTO -->
+  <article class="slide slide-left" data-title="El reto">
+    <span class="kicker">El punto de partida</span>
+    <h2 class="display">El talento está. <span class="accent">La chispa, no.</span></h2>
+    <div class="versus">
+      <div class="v-col v-hard">
+        <h3>Bienvenida hoy</h3>
+        <li>Pasillos llenos de gente que no sabe qué hace el de al lado</li>
+        <li>Cada empresa se conoce por suerte, no por diseño</li>
+        <li>Las colaboraciones no cruzan la puerta del coworking</li>
+      </div>
+      <div class="v-mid">→</div>
+      <div class="v-col v-easy">
+        <h3>Bienvenida que queremos</h3>
+        <li>Un nuevo habitante sabe en 5 minutos qué hay en el Polo</li>
+        <li>El ecosistema se ve a sí mismo, en 2D y en 3D</li>
+        <li>Trabajar juntos es la cultura, no la excepción</li>
+      </div>
+    </div>
+    <div class="origin-note">Origen: Reto Polo · Summer Polo · idea ganadora del mapa + robot</div>
+  </article>
+
+  <!-- 2 · FASE 01 -->
+  <article class="slide slide-left" data-title="Encuentro de lanzamiento">
+    <span class="kicker">Fase 01 · Octubre</span>
+    <h2 class="display">Encuentro de <span class="accent">lanzamiento</span></h2>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="lbl">La convocatoria</div>
+        <div class="body">
+          <h3>Del “hola” al compromiso</h3>
+          <p>Convocatoria abierta a empresas e habitantes del Polo. Presentamos la demo MAPAPOLO que ya existe y la visión completa del polo en 3D con su robot.</p>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="lbl">Las mesas</div>
+        <div class="body">
+          <h3>Oficios, no salas de espera</h3>
+          <p>Mesas por disciplina: 3D, interacción, IA, arte, sonido, documentación. Cada persona elige qué pone encima de la mesa — y qué quiere aprender.</p>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="lbl">La salida</div>
+        <div class="body">
+          <h3>10-20 personas con rol</h3>
+          <p>Cada participante sale con un rol concreto, una primera tarea jugosa y la fecha de su primer taller. La comunidad arranca en movimiento.</p>
+          <span class="out">Salida → fichas · roles · calendario</span>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <!-- 3 · FASE 02 -->
+  <article class="slide slide-left" data-title="Talleres y mentoría">
+    <span class="kicker">Fase 02 · Octubre-Noviembre · cada dos semanas</span>
+    <h2 class="display">Talleres de <span class="accent">construcción</span></h2>
+    <p class="sub">Cuatro sesiones de ejecución, mentorizadas por Kreatures. Nada de charlas: cada taller deja una pieza integrada en el mapa y en el 3D.</p>
+    <div class="phases">
+      <div class="phase-card c1">
+        <div class="pnum">T1-T2</div>
+        <h3>Levantar el edificio</h3>
+        <li>Medir y fotografiar el Polo</li>
+        <li>Volumen exterior + planta baja</li>
+        <li>Escena web navegable</li>
+      </div>
+      <div class="phase-card c2">
+        <div class="pnum">T3-T5</div>
+        <h3>El robot y el 3D</h3>
+        <li>Oficinas y zonas reconocibles</li>
+        <li>Robot 3D que saluda y señala</li>
+        <li>Mapa 2D ↔ espacio 3D conectado</li>
+      </div>
+      <div class="phase-card c3">
+        <div class="pnum">T6</div>
+        <h3>Ensayo general</h3>
+        <li>Pruebas en táctil de entrada</li>
+        <li>Fixes críticos en vivo</li>
+        <li>Guion del evento final</li>
+      </div>
+    </div>
+  </article>
+
+  <!-- 4 · ENTREGABLES -->
+  <article class="slide slide-left" data-title="Lo que queda">
+    <span class="kicker">Entregables</span>
+    <h2 class="display">Lo que queda <span class="accent">cuando termina</span></h2>
+    <div class="grid2">
+      <div class="g-card">
+        <div class="g-ico">01 /</div>
+        <h3>El dispositivo vive</h3>
+        <p>El portal digital se siente vivo: cada despacho, cada empresa y cada colaboración del Polo quedan ahí para todos.</p>
+      </div>
+      <div class="g-card">
+        <div class="g-ico">02 /</div>
+        <h3>El edificio en 3D</h3>
+        <p>El Polo entero, modelado por su propia gente, navegable desde el navegador y desde el táctil de la entrada.</p>
+      </div>
+      <div class="g-card">
+        <div class="g-ico">03 /</div>
+        <h3>El robot prototipo</h3>
+        <p>El asistente del Polo, por primera vez con cuerpo: en 3D, en su casa, saludando. La semilla del robot real.</p>
+      </div>
+      <div class="g-card">
+        <div class="g-ico">04 /</div>
+        <h3>Una comunidad con oficio</h3>
+        <p>Un grupo estable de habitantes que trabaja junto, con roles, canal propio y proyecto. Eso no se contrata: se siembra.</p>
+      </div>
+    </div>
+  </article>
+
+  <!-- 5 · PRESUPUESTO -->
+  <article class="slide slide-left" data-title="Presupuesto">
+    <span class="kicker">Inversión total · IVA incluido</span>
+    <h2 class="display">5.000 € <span class="accent">cerrados</span></h2>
+    <div class="budget">
+      <div class="brow"><div class="f">Fase 01</div><div class="d">Encuentro de lanzamiento · diseño, convocatoria y facilitación</div><div class="v">1.080 €</div></div>
+      <div class="brow"><div class="f">Fase 02</div><div class="d">Talleres + mentoría · 4 sesiones, 3D, robot e integración</div><div class="v">1.830 €</div></div>
+      <div class="brow"><div class="f">Fase 03</div><div class="d">Evento final · demo, créditos, vídeo-resumen y acta</div><div class="v">1.215 €</div></div>
+      <div class="brow total"><div class="f">Total</div><div class="d">Subtotal + IVA 21%</div><div class="v">4.991,25 €</div></div>
+    </div>
+    <div class="pay-row">
+      <div class="pay-box"><b>50%</b>al inicio del programa</div>
+      <div class="pay-box"><b>50%</b>tras el evento final</div>
+      <div class="pay-box"><b>Solo</b>se factura lo ejecutado</div>
+    </div>
+    <p class="budget-note">El Polo aporta: espacio · pantalla táctil · montaje, desmontaje y catering</p>
+  </article>
+
+  <!-- 6 · QUIÉN LO HACE -->
+  <article class="slide slide-left" data-title="Quién lo hace">
+    <span class="kicker">El equipo</span>
+    <h2 class="display">La misma gente <span class="accent">del tejado</span></h2>
+    <p class="sub">El taller se monta con los técnicos del propio Polo — nosotros solo ponemos el proceso promovido por el proyecto, la mentoría y el material compartido.</p>
+    <div class="step-chips" style="display:flex;gap:12px;flex-wrap:wrap;margin-top:26px">
+      <span class="chip">Mentoría por oficio</span>
+      <span class="chip">Process & dirección</span>
+      <span class="chip">Construcción en directo</span>
+    </div>
+  </article>
+
+  <!-- 7 · CIERRE -->
+  <article class="slide" data-title="2027">
+    <span class="kicker">2027 · el siguiente nivel</span>
+    <h2 class="display">2026 <span class="accent">planta el cimiento.</span><br>2027 <span class="accent">despierta el robot.</span></h2>
+    <p class="sub">Este programa valida los datos, los casos de uso y la comunidad que necesita un asistente real. Ganamos el reto de llevarlo a la siguiente generación — juntos.</p>
+    <div class="tag-row">
+      <span class="chip">Mapa → <b>asistente</b></span>
+      <span class="chip">3D → <b>robot real</b></span>
+      <span class="chip">Comunidad → <b>ecosistema</b></span>
+    </div>
+  </article>
+
+  <!-- 8 · CONTACTO -->
+  <article class="slide" data-title="Contacto">
+    <div class="orb" style="margin-bottom:30px">
+      <div class="ring r1"></div>
+      <div class="ring r2"></div>
+      <div class="ring r3 core"></div>
+      <div class="pupil" style="animation:twitch 5s ease-in-out infinite"></div>
+    </div>
+    <span class="kicker">El siguiente paso</span>
+    <h2 class="display">Construyamos <span class="accent">juntos</span></h2>
+    <p class="sub">30 minutos para fijar la fecha del encuentro, validar el grupo y arrancar.</p>
+    <div class="tag-row">
+      <span class="chip">Kreatures <b>Studio</b></span>
+      <span class="chip">Polo · <b>Málaga</b></span>
+      <span class="chip">Demo <b>kreatures-studio.github.io/mapapolo</b></span>
+    </div>
+  </article>
+
+</section>
+
+<!-- ================= CHROME ================= -->
+<div class="deck-top">
+  <span class="brand"><i>◈</i>KREATURES</span>
+  <span class="steps-label" id="stepsLabel">01 / PROGRAMA</span>
+</div>
+
+<div class="deck-bottom">
+  <div class="pager" id="pager"></div>
+  <span class="hint">← → navegar · espacio = siguiente</span>
+  <div class="deck-nav">
+    <button class="nav-btn" id="prevBtn" title="Anterior">←</button>
+    <button class="nav-btn" id="nextBtn" title="Siguiente">→</button>
+  </div>
+</div>
+
+<script>
+  (function(){
+    const slides = [...document.querySelectorAll('.slide')];
+    const pager = document.getElementById('pager');
+    const progress = document.getElementById('progress');
+    const label = document.getElementById('stepsLabel');
+    let cur = 0;
+    let dir = 1;
+
+    slides.forEach(()=>{ const d=document.createElement('span'); pager.appendChild(d); });
+    const dots = [...pager.children];
+
+    function place(n){
+      slides.forEach((s,i)=>{
+        s.classList.remove('cur','leave-fwd','leave-back');
+        if(i<n) s.classList.add('leave-back');
+        else if(i>n) s.classList.add('leave-fwd');
+      });
+      slides[n].classList.add('cur');
+      dots.forEach((d,i)=>d.classList.toggle('on',i===n));
+      progress.style.transform = 'scaleX('+((n+1)/slides.length)+')';
+      label.textContent = String(n+1).padStart(2,'0')+' / '+slides[n].dataset.title.toUpperCase();
+    }
+    function go(n){
+      n=Math.max(0,Math.min(slides.length-1,n));
+      if(n===cur) return;
+      cur=n; place(cur);
+    }
+    const next=()=>go(cur+1), prev=()=>go(cur-1);
+
+    window.addEventListener('keydown',e=>{
+      if(['ArrowRight','ArrowDown',' ','PageDown','Enter'].includes(e.key)){e.preventDefault();next();}
+      else if(['ArrowLeft','ArrowUp','PageUp','Backspace'].includes(e.key)){e.preventDefault();prev();}
+      else if(e.key==='Home')go(0);
+      else if(e.key==='End')go(slides.length-1);
+    });
+
+    let x0=null;
+    window.addEventListener('touchstart',e=>x0=e.touches[0].clientX,{passive:true});
+    window.addEventListener('touchend',e=>{
+      if(x0===null)return; const dx=e.changedTouches[0].clientX-x0;
+      if(Math.abs(dx)>45){ dx<0?next():prev(); }
+      x0=null;
+    },{passive:true});
+
+    document.getElementById('nextBtn').addEventListener('click',next);
+    document.getElementById('prevBtn').addEventListener('click',prev);
+
+    place(0);
+  })();
+
+  /* ---------- constellation ---------- */
+  (function(){
+    const cv=document.getElementById('constellation');
+    const ctx=cv.getContext('2d');
+    let W,H,pts;
+    function resize(){
+      W=cv.width=innerWidth; H=cv.height=innerHeight;
+      pts=Array.from({length:Math.min(90,Math.floor(W*H/22000))},()=>({
+        x:Math.random()*W, y:Math.random()*H,
+        vx:(Math.random()-.5)*.14, vy:(Math.random()-.5)*.14,
+        r:Math.random()*1.4+.4, tw:Math.random()*Math.PI*2
+      }));
+    }
+    resize(); addEventListener('resize',resize);
+    (function draw(){
+      ctx.clearRect(0,0,W,H);
+      for(const p of pts){
+        p.x+=p.vx; p.y+=p.vy; p.tw+=.02;
+        if(p.x<0||p.x>W)p.vx*=-1; if(p.y<0||p.y>H)p.vy*=-1;
+        const a=.35+.3*Math.sin(p.tw);
+        ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,7); ctx.fillStyle=`rgba(252,191,73,${a})`; ctx.fill();
+      }
+      for(let i=0;i<pts.length;i++)for(let j=i+1;j<pts.length;j++){
+        const a=pts[i],b=pts[j],dx=a.x-b.x,dy=a.y-b.y,d2=dx*dx+dy*dy;
+        if(d2<12000){
+          ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y);
+          ctx.strokeStyle=`rgba(252,191,73,${(1-d2/12000)*.12})`; ctx.stroke();
+        }
+      }
+      requestAnimationFrame(draw);
+    })();
+  })();
+</script>
+</body>
+</html>
