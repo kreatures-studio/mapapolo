@@ -202,7 +202,40 @@
   .arrows.prev{left:26px}.arrows.next{right:26px}
   .hint{position:fixed;bottom:64px;left:50%;transform:translateX(-50%);font-family:var(--font-m);font-size:12px;letter-spacing:.22em;color:rgba(143,163,189,.65);text-transform:uppercase;z-index:6}
   .progress{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--red),var(--red-deep));z-index:7;transform:scaleX(0);transform-origin:left;transition:transform .5s ease}
-  @media(max-width:860px){.arrows{display:none}}
+  /* ---------- MOBILE ONLY: desktop queda intacto ---------- */
+  @media(max-width:860px){
+    .arrows{display:grid;height:54px;width:54px;font-size:24px;border-width:2px}
+    .arrows.prev{left:10px}.arrows.next{right:10px}
+  }
+  @media(max-width:760px){
+    .slide{overflow-y:auto;justify-content:flex-start;padding:92px 5vw 120px;-webkit-overflow-scrolling:touch}
+    .inner{width:100%}
+    .kicker{letter-spacing:.2em;text-align:center}
+    .kicker::before,.kicker::after{width:22px}
+    h2.display{font-size:clamp(30px,8.4vw,44px)}
+    h2.display br{display:none}
+    h2.oneline{font-size:clamp(22px,6.4vw,30px)}
+    .sub{font-size:17px}
+    .cover .name{font-size:clamp(36px,10.5vw,60px)}
+    .cover .name .over{font-size:15px;letter-spacing:.26em}
+    .cover .lead{font-size:17px}
+    .cover .lead br{display:none}
+    .cover .badge{font-size:11px;padding:9px 16px}
+    .cover .cta-row .btn{width:100%;justify-content:center}
+    .v-col{padding:20px 18px}
+    .v-col h3{font-size:21px}
+    .v-col li{font-size:15.5px}
+    .pcard li,.band li{font-size:15.5px}
+    .gcard h3{font-size:20px}
+    .gcard p{font-size:15.5px}
+    .brow .d{font-size:16px}
+    .chrome-top{padding:14px 16px}
+    .chrome-top .l{font-size:11px;letter-spacing:.18em}
+    .chrome-top .r{font-size:10.5px}
+    .chrome-bottom{gap:10px;padding:10px 14px;max-width:94vw}
+    .navbtn{width:14px;height:14px}
+    .hint{display:none}
+  }
 
   /* constellation canvas */
   #stars{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.5}
@@ -422,13 +455,13 @@
     document.querySelectorAll('a[href="#next"]').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();next();}));
     document.querySelectorAll('a[href="#next2"]').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();go(5);}));
 
-    let x0=null;
-    window.addEventListener('touchstart',e=>x0=e.touches[0].clientX,{passive:true});
+    let x0=null,y0=null;
+    window.addEventListener('touchstart',e=>{x0=e.touches[0].clientX;y0=e.touches[0].clientY;},{passive:true});
     window.addEventListener('touchend',e=>{
       if(x0===null)return;
-      const dx=e.changedTouches[0].clientX-x0;
-      if(Math.abs(dx)>45)dx<0?next():prev();
-      x0=null;
+      const dx=e.changedTouches[0].clientX-x0,dy=e.changedTouches[0].clientY-y0;
+      if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)*1.4)dx<0?next():prev();
+      x0=y0=null;
     },{passive:true});
 
     let hintT=setTimeout(()=>{const h=document.getElementById('hint');h.style.transition='opacity .6s';h.style.opacity='0'},6000);
