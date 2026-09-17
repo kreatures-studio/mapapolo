@@ -203,12 +203,10 @@
   .hint{position:fixed;bottom:64px;left:50%;transform:translateX(-50%);font-family:var(--font-m);font-size:12px;letter-spacing:.22em;color:rgba(143,163,189,.65);text-transform:uppercase;z-index:6}
   .progress{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--red),var(--red-deep));z-index:7;transform:scaleX(0);transform-origin:left;transition:transform .5s ease}
   /* ---------- MOBILE ONLY: desktop queda intacto ---------- */
-  @media(max-width:860px){
-    .arrows{display:grid;height:54px;width:54px;font-size:24px;border-width:2px}
-    .arrows.prev{left:10px}.arrows.next{right:10px}
-  }
+  @media(max-width:860px){.arrows{display:none}}
+  .mbar{display:none}
   @media(max-width:760px){
-    .slide{overflow-y:auto;justify-content:flex-start;padding:92px 5vw 120px;-webkit-overflow-scrolling:touch}
+    .slide{overflow-y:auto;justify-content:flex-start;padding:92px 5vw 175px;-webkit-overflow-scrolling:touch}
     .inner{width:100%}
     .kicker{letter-spacing:.2em;text-align:center}
     .kicker::before,.kicker::after{width:22px}
@@ -232,8 +230,12 @@
     .chrome-top{padding:14px 16px}
     .chrome-top .l{font-size:11px;letter-spacing:.18em}
     .chrome-top .r{font-size:10.5px}
-    .chrome-bottom{gap:10px;padding:10px 14px;max-width:94vw}
+    .chrome-bottom{gap:10px;padding:10px 14px;max-width:94vw;bottom:calc(88px + env(safe-area-inset-bottom,0px))}
     .navbtn{width:14px;height:14px}
+    .mbar{display:flex;position:fixed;left:14px;right:14px;bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:7;gap:12px}
+    .mbtn{flex:1;font-family:var(--font-m);font-size:15px;font-weight:700;border-radius:12px;padding:15px 0;cursor:pointer;background:rgba(19,35,63,.85);color:var(--ink);border:1px solid var(--line);backdrop-filter:blur(8px)}
+    .mbtn.primary{background:var(--red);border-color:var(--red);color:#fff}
+    .mbtn:disabled{opacity:.35}
     .hint{display:none}
   }
 
@@ -415,6 +417,11 @@
 
 <div class="chrome-bottom" id="pager"></div>
 
+<div class="mbar">
+  <button class="mbtn" id="mPrevBtn">‹ Atrás</button>
+  <button class="mbtn primary" id="mNextBtn">Siguiente ›</button>
+</div>
+
 <button class="arrows prev" id="prevBtn" title="Anterior">‹</button>
 <button class="arrows next" id="nextBtn" title="Siguiente">›</button>
 
@@ -428,6 +435,7 @@
 
     slides.forEach(()=>{const b=document.createElement('button');b.className='navbtn';b.title='Ir a slide';pager.appendChild(b);});
     const dots=[...pager.children];
+    const mPrev=document.getElementById('mPrevBtn'),mNext=document.getElementById('mNextBtn');
 
     function place(n){
       slides.forEach((s,i)=>{
@@ -437,6 +445,8 @@
       dots.forEach((d,i)=>d.classList.toggle('on',i===n));
       progress.style.transform='scaleX('+((n+1)/slides.length)+')';
       label.textContent=String(n+1).padStart(2,'0')+' / '+String(slides.length).padStart(2,'0');
+      mPrev.disabled=(n===0);
+      mNext.disabled=(n===slides.length-1);
     }
     function go(n){cur=Math.max(0,Math.min(slides.length-1,n));place(cur);}
     const next=()=>go(cur+1),prev=()=>go(cur-1);
@@ -449,6 +459,8 @@
     });
     document.getElementById('nextBtn').addEventListener('click',next);
     document.getElementById('prevBtn').addEventListener('click',prev);
+    mPrev.addEventListener('click',prev);
+    mNext.addEventListener('click',next);
     dots.forEach((d,i)=>d.addEventListener('click',()=>go(i)));
 
     /* cover CTAs */
