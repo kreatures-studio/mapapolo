@@ -181,9 +181,13 @@
   .tickets .head{display:flex;align-items:baseline;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:16px}
   .tickets h3{font-size:clamp(22px,3vw,30px);font-weight:700}
   .tickets .head a{font-family:var(--font-m);font-size:13px;color:var(--cyan);text-decoration:none}
-  .ticketbox{border:1px solid var(--line);border-radius:16px;overflow:hidden;background:#fff}
-  .ticketbox iframe{display:block;width:100%;height:340px;border:0}
-  .tickets .note{font-family:var(--font-m);font-size:12px;color:var(--muted);margin-top:10px}
+  .ticketcard{display:grid;grid-template-columns:1fr auto;gap:24px;align-items:center;border:1px solid var(--line);border-radius:16px;padding:28px 30px;background:linear-gradient(150deg,rgba(23,42,71,.9),rgba(19,35,63,.6));text-align:left;position:relative;overflow:hidden}
+  .ticketcard::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--teal),var(--cyan),var(--violet))}
+  .ticketcard .tc-tag{display:inline-block;font-family:var(--font-m);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#06121f;background:var(--cyan);border-radius:999px;padding:6px 12px;margin-bottom:12px}
+  .ticketcard h4{font-size:clamp(20px,2.6vw,26px);font-weight:700;margin-bottom:8px}
+  .ticketcard p{color:var(--muted);font-size:16px}
+  .ticketcard p b{color:var(--ink)}
+  @media(max-width:640px){.ticketcard{grid-template-columns:1fr;gap:18px;padding:24px 20px}.ticketcard .btn{width:100%;justify-content:center}}
 
   footer{border-top:1px solid var(--line);margin-top:90px;padding:34px 0 54px;color:var(--muted);font-size:14px;display:flex;justify-content:space-between;align-items:center;gap:18px;flex-wrap:wrap}
   footer .fl{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
@@ -399,10 +403,14 @@
           <h3>Entradas</h3>
           <a href="#" data-cfg="eventbrite" target="_blank" rel="noopener">Abrir en Eventbrite →</a>
         </div>
-        <div class="ticketbox">
-          <iframe src="https://www.eventbrite.es/tickets-external?eid=2003616001396&ref=etckt" title="Entradas de Polo LAB en Eventbrite" loading="lazy" scrolling="auto"></iframe>
+        <div class="ticketcard">
+          <div>
+            <span class="tc-tag">Entrada</span>
+            <h4>Polo LAB: Build the Next Thing</h4>
+            <p><b>Miércoles 28 de octubre · 17:30 – 20:00</b><br>Polo de Contenidos Digitales · Avda. Sor Teresa Prat, 15 · Málaga</p>
+          </div>
+          <a href="#" class="btn primary" data-cfg="eventbrite" target="_blank" rel="noopener">Reservar en Eventbrite →</a>
         </div>
-        <p class="note">Si el widget no carga, reserva tu plaza directamente en Eventbrite.</p>
       </div>
     </div>
   </section>
