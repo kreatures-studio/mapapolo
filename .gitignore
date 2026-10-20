@@ -15,3 +15,4 @@ test_visual.py
 *.jpg
 *.jpeg
 v1_1440x900.png
+!assets/*.png
