@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Polo LAB: Build the Next Thing · 28 de octubre</title>
+<meta name="description" content="Polo LAB: un laboratorio de cocreación para la comunidad maker malagueña. Miércoles 28 de octubre, 17:30–20:00, en el Polo de Contenidos Digitales.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Polo LAB: Build the Next Thing">
+<meta property="og:description" content="Miércoles 28 de octubre · 17:30–20:00 · Polo de Contenidos Digitales. Un evento para construir, no para escuchar.">
+<meta property="og:url" content="https://kreatures-studio.github.io/mapapolo/pololab.html">
+<meta property="og:image" content="https://kreatures-studio.github.io/mapapolo/assets/polo-icon.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#08071a">
+<link rel="icon" type="image/png" href="assets/polo-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#08071a;
+    --panel:rgba(19,27,54,.72);
+    --panel2:rgba(24,32,64,.86);
+    --ink:#eef2fa;
+    --muted:#93a0bd;
+    --line:rgba(238,242,250,.13);
+    --cyan:#57ffd8;
+    --teal:#00dabb;
+    --violet:#a050ff;
+    --font-d:"Space Grotesk",system-ui,sans-serif;
+    --font-m:"JetBrains Mono",Consolas,monospace;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    background:var(--bg);color:var(--ink);font-family:var(--font-d);line-height:1.5;
+    -webkit-font-smoothing:antialiased;overflow:hidden;
+  }
+  body::before{
+    content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
+    background-image:
+      linear-gradient(rgba(238,242,250,.045) 1px,transparent 1px),
+      linear-gradient(90deg,rgba(238,242,250,.045) 1px,transparent 1px);
+    background-size:52px 52px;
+    mask-image:radial-gradient(ellipse at 45% 40%,#000 15%,transparent 80%);
+  }
+  body::after{
+    content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
+    background:
+      radial-gradient(900px 560px at 78% 0%,rgba(87,255,216,.12),transparent 62%),
+      radial-gradient(760px 560px at 0% 100%,rgba(160,80,255,.13),transparent 60%);
+  }
+  ::selection{background:var(--teal);color:#06121f}
+
+  .page{
+    position:relative;z-index:2;height:100svh;max-width:1440px;margin:0 auto;
+    padding:clamp(16px,2.6vh,34px) clamp(20px,4vw,60px) clamp(14px,2.4vh,30px);
+    display:flex;flex-direction:column;gap:clamp(10px,2vh,26px);
+  }
+
+  header{display:flex;align-items:center;justify-content:space-between;gap:16px;flex:none}
+  .brand{display:flex;align-items:center;gap:13px;text-decoration:none}
+  .brand img{height:clamp(22px,3.4vh,30px);width:auto;display:block}
+  .brand .x{font-family:var(--font-m);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);border-left:1px solid var(--line);padding-left:13px}
+  .top-cta{display:inline-flex;align-items:center;gap:8px;font-family:var(--font-m);font-size:12.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;background:var(--teal);color:#06121f;border-radius:9px;padding:11px 18px;transition:filter .2s,transform .2s}
+  .top-cta:hover{filter:brightness(1.08);transform:translateY(-1px)}
+  @media(max-width:520px){.brand .x{display:none}}
+
+  .stage{
+    flex:1;min-height:0;display:grid;grid-template-columns:1.12fr .88fr;
+    gap:clamp(22px,4vw,64px);align-items:center;
+  }
+  .left{display:flex;flex-direction:column;min-height:0;height:100%;justify-content:center;gap:clamp(12px,2.2vh,22px)}
+  .badge{
+    display:inline-flex;align-items:center;gap:9px;align-self:flex-start;
+    font-family:var(--font-m);font-size:clamp(10px,1.4vh,12.5px);letter-spacing:.2em;text-transform:uppercase;
+    border:1px solid rgba(87,255,216,.42);padding:8px 15px;border-radius:99px;background:rgba(87,255,216,.06);
+  }
+  .badge .pulse{width:7px;height:7px;border-radius:50%;background:var(--teal);animation:pulse 2s infinite}
+  @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(0,219,187,.55)}50%{box-shadow:0 0 0 7px rgba(0,219,187,0)}}
+  .over{font-family:var(--font-m);font-size:clamp(10px,1.5vh,13px);letter-spacing:.3em;text-transform:uppercase;color:var(--muted);margin-top:2px}
+  h1{font-size:clamp(40px,7.2vw,92px);font-weight:700;letter-spacing:-.045em;line-height:.95}
+  h1 .hl{color:var(--cyan)}
+  .lead{color:#c9d4e8;font-size:clamp(15px,2vh,19px);max-width:34em}
+  .lead b{color:var(--ink)}
+  .meta{display:flex;gap:9px;flex-wrap:wrap}
+  .chip{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:999px;padding:8px 14px;background:rgba(19,27,54,.62);font-family:var(--font-m);font-size:clamp(11px,1.6vh,13px);color:#c9d4e8;white-space:nowrap}
+  .chip svg{width:14px;height:14px;stroke:var(--cyan);fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex:none}
+  .chip a{color:inherit;text-decoration:none;border-bottom:1px dotted rgba(201,212,232,.4)}
+
+  .rail{display:flex;align-items:flex-end;justify-content:space-between;gap:22px;flex-wrap:wrap;margin-top:clamp(2px,1.2vh,10px)}
+  .countdown{display:grid;grid-template-columns:repeat(4,minmax(56px,1fr));gap:9px;max-width:330px;width:100%}
+  .cd{border:1px solid var(--line);border-radius:11px;background:rgba(19,27,54,.72);padding:9px 6px;text-align:center}
+  .cd .n{font-size:clamp(20px,3.2vh,28px);font-weight:700;line-height:1;color:var(--cyan);font-variant-numeric:tabular-nums}
+  .cd .l{font-family:var(--font-m);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-top:5px}
+  .acts{display:flex;flex-direction:column;gap:8px;align-items:flex-start}
+  .btn{display:inline-flex;align-items:center;gap:9px;font-family:var(--font-m);font-size:clamp(12.5px,1.8vh,15px);font-weight:700;text-decoration:none;border-radius:11px;padding:clamp(12px,1.9vh,16px) clamp(18px,2.4vw,28px);transition:transform .2s,box-shadow .2s}
+  .btn.primary{background:var(--teal);color:#06121f}
+  .btn.primary:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(0,219,187,.3)}
+  .link{font-family:var(--font-m);font-size:clamp(10.5px,1.5vh,12px);color:var(--muted);text-decoration:none;border-bottom:1px dotted rgba(147,160,189,.45);padding-bottom:1px}
+  .link:hover{color:var(--cyan);border-color:var(--cyan)}
+  .live{font-family:var(--font-m);font-size:clamp(10px,1.4vh,11.5px);letter-spacing:.08em;color:var(--muted)}
+  .live b{color:var(--teal)}
+
+  .socials{display:flex;gap:8px;flex-wrap:wrap}
+  .soc{display:inline-flex;align-items:center;gap:6px;font-family:var(--font-m);font-size:clamp(10px,1.4vh,11.5px);letter-spacing:.08em;text-transform:uppercase;color:#c9d4e8;text-decoration:none;border:1px solid var(--line);border-radius:999px;padding:8px 13px;background:rgba(19,27,54,.6);transition:border-color .2s,transform .2s}
+  .soc:hover{border-color:var(--cyan);transform:translateY(-1px)}
+  .soc .ar{color:var(--cyan)}
+
+  .poster{
+    position:relative;height:100%;max-height:660px;border:1px solid rgba(87,255,216,.22);
+    border-radius:22px;padding:clamp(22px,3.4vw,40px);
+    background:linear-gradient(165deg,rgba(24,32,64,.9),rgba(12,17,38,.82));
+    display:flex;flex-direction:column;justify-content:space-between;gap:18px;overflow:hidden;
+    box-shadow:0 30px 80px rgba(0,0,0,.45),0 0 0 1px rgba(87,255,216,.05) inset;
+  }
+  .poster::before{
+    content:"";position:absolute;width:520px;height:520px;right:-190px;top:-210px;border-radius:50%;
+    background:conic-gradient(from 210deg,rgba(87,255,216,.2),rgba(160,80,255,.18),transparent 62%);
+    filter:blur(8px);opacity:.7;pointer-events:none;
+  }
+  .poster::after{
+    content:"";position:absolute;inset:0;pointer-events:none;
+    background-image:linear-gradient(45deg,transparent 48%,rgba(87,255,216,.05) 49%,rgba(87,255,216,.05) 51%,transparent 52%);
+    background-size:26px 26px;opacity:.5;
+  }
+  .poster>*{position:relative;z-index:1}
+  .date{display:flex;align-items:flex-start;gap:14px}
+  .date .big{font-size:clamp(82px,12vw,138px);font-weight:700;line-height:.8;letter-spacing:-.06em;background:linear-gradient(160deg,#fff 10%,var(--cyan) 70%);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .date .side{display:flex;flex-direction:column;gap:5px;padding-top:6px}
+  .date .mon{font-family:var(--font-m);font-size:clamp(13px,2vh,17px);letter-spacing:.3em;text-transform:uppercase;color:var(--cyan)}
+  .date .day{font-family:var(--font-m);font-size:clamp(10.5px,1.5vh,12px);letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+  .date .clock{margin-top:auto;font-family:var(--font-m);font-size:clamp(14px,2.2vh,19px);font-weight:700;color:var(--ink);letter-spacing:.04em}
+  .venue{display:flex;align-items:flex-start;gap:10px;font-size:clamp(12.5px,1.8vh,15px);color:#c9d4e8;border-top:1px solid var(--line);padding-top:16px}
+  .venue svg{width:15px;height:15px;stroke:var(--cyan);fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex:none;margin-top:2px}
+  .venue span{display:block;color:var(--muted);font-size:.86em;margin-top:3px}
+  .project{display:flex;flex-direction:column;gap:10px}
+  .project .pn{font-family:var(--font-m);font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--violet)}
+  .project h3{font-size:clamp(17px,2.4vh,22px);font-weight:700}
+  .retos{display:flex;flex-direction:column;gap:8px;margin-top:2px}
+  .reto{display:flex;align-items:baseline;gap:10px;font-size:clamp(12px,1.7vh,14px);color:#c9d4e8}
+  .reto b{font-family:var(--font-m);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--cyan);flex:none}
+  .reto i{font-style:normal;color:var(--muted)}
+  .poster .fine{font-family:var(--font-m);font-size:10px;letter-spacing:.06em;color:var(--muted);border-top:1px solid var(--line);padding-top:14px}
+
+  footer{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;flex:none}
+  footer .fl{display:flex;align-items:center;gap:12px}
+  footer img{height:clamp(18px,2.6vh,23px);width:auto;display:block}
+  footer .fx{font-family:var(--font-m);font-size:9.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted)}
+  footer .map{font-family:var(--font-m);font-size:10.5px;letter-spacing:.06em;color:var(--muted)}
+  footer .map a{color:var(--cyan);text-decoration:none}
+
+  .toast{position:fixed;left:50%;bottom:18px;transform:translate(-50%,calc(100% + 40px));z-index:60;background:#06121f;color:var(--ink);border:1px solid rgba(87,255,216,.5);border-radius:11px;padding:11px 18px;font-family:var(--font-m);font-size:12px;box-shadow:0 16px 36px rgba(0,0,0,.45);transition:transform .32s cubic-bezier(.16,1,.3,1)}
+  .toast.show{transform:translate(-50%,0)}
+
+  @media(max-width:960px){
+    .stage{grid-template-columns:1fr}
+    .poster{display:none}
+    h1{font-size:clamp(42px,9vw,72px)}
+    .rail{margin-top:4px}
+  }
+  @media(max-width:560px){
+    .page{padding-bottom:max(12px,env(safe-area-inset-bottom))}
+    .rail{flex-direction:column;align-items:stretch;gap:12px}
+    .countdown{max-width:none}
+    .acts{flex-direction:row;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+    .btn{padding:13px 18px}
+    .lead{font-size:14.5px}
+    .chip{padding:7px 11px}
+    .socials{justify-content:flex-start;gap:6px}
+    .soc{font-size:10px;padding:7px 10px;gap:5px;letter-spacing:.04em}
+  }
+  @media(max-height:760px) and (min-width:961px){
+    .poster{max-height:none}
+    .lead{font-size:15px}
+    h1{font-size:clamp(38px,6vw,72px)}
+  }
+  @media(max-height:640px){
+    .badge{display:none}
+    .lead{display:none}
+    h1{font-size:clamp(30px,6.4vh,46px)}
+    .over{font-size:9.5px}
+    .page{gap:8px}
+    .cd .n{font-size:18px}
+    .socials{display:none}
+  }
+  @media(prefers-reduced-motion:reduce){
+    .badge .pulse{animation:none}
+    .btn,.top-cta,.soc{transition:none}
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+  <header>
+    <a class="brand" href="pololab.html" aria-label="Polo LAB">
+      <img src="assets/polo-logo-blanco.png" alt="Polo Nacional de Contenidos Digitales">
+      <span class="x">× Kreatures</span>
+    </a>
+    <a class="top-cta" href="#" data-cfg="eventbrite" target="_blank" rel="noopener">Entradas →</a>
+  </header>
+
+  <main class="stage">
+    <section class="left">
+      <span class="badge"><span class="pulse"></span>Polo LAB · Laboratorio de cocreación</span>
+      <div class="over">Polo de Contenidos Digitales presenta</div>
+      <h1>Build the <span class="hl">Next</span> Thing</h1>
+      <p class="lead">Un evento para construir, no para escuchar. Elige un reto, forma equipo y ayuda a diseñar <b>la próxima herramienta digital del Polo</b>.</p>
+
+      <div class="meta">
+        <span class="chip">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/></svg>
+          Miércoles 28 de octubre
+        </span>
+        <span class="chip">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+          17:30 – 20:00
+        </span>
+        <span class="chip">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-5.4-7-11a7 7 0 1 1 14 0c0 5.6-7 11-7 11z"/><circle cx="12" cy="10" r="2.6"/></svg>
+          <a href="https://maps.google.com/?q=Polo+Nacional+de+Contenidos+Digitales,+Avda.+Sor+Teresa+Prat+15,+M%C3%A1laga" target="_blank" rel="noopener">Polo · Tabacalera, Málaga</a>
+        </span>
+      </div>
+
+      <div class="socials">
+        <a href="#" class="soc" data-cfg="whatsapp">WhatsApp <span class="ar">↗</span></a>
+        <a href="#" class="soc" data-cfg="instagram">Instagram <span class="ar">↗</span></a>
+        <a href="#" class="soc" data-cfg="linkedin">LinkedIn <span class="ar">↗</span></a>
+        <a href="#" class="soc" data-cfg="x">X <span class="ar">↗</span></a>
+      </div>
+
+      <div class="rail">
+        <div>
+          <div class="countdown" id="countdown" aria-label="Cuenta atrás para el evento">
+            <div class="cd"><div class="n" data-cd="d">00</div><div class="l">Días</div></div>
+            <div class="cd"><div class="n" data-cd="h">00</div><div class="l">Horas</div></div>
+            <div class="cd"><div class="n" data-cd="m">00</div><div class="l">Min</div></div>
+            <div class="cd"><div class="n" data-cd="s">00</div><div class="l">Seg</div></div>
+          </div>
+          <div class="live" id="liveCount" aria-live="polite" style="margin-top:9px">Inscripciones abiertas · plazas limitadas</div>
+        </div>
+        <div class="acts">
+          <a href="#" class="btn primary" data-cfg="eventbrite" target="_blank" rel="noopener">Reservar plaza →</a>
+          <a href="#" class="link" data-cfg="form">Déjanos tus datos →</a>
+        </div>
+      </div>
+    </section>
+
+    <aside class="poster" aria-label="Resumen del evento">
+      <div class="date">
+        <div class="big">28</div>
+        <div class="side">
+          <span class="mon">Oct</span>
+          <span class="day">Miércoles</span>
+          <span class="clock">17:30 — 20:00</span>
+        </div>
+      </div>
+
+      <div class="venue">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-5.4-7-11a7 7 0 1 1 14 0c0 5.6-7 11-7 11z"/><circle cx="12" cy="10" r="2.6"/></svg>
+        <div>Polo de Contenidos Digitales<span>Avda. Sor Teresa Prat, 15 · Tabacalera · Málaga</span></div>
+      </div>
+
+      <div class="project">
+        <span class="pn">Primer proyecto</span>
+        <h3>Mapa Polo</h3>
+        <div class="retos">
+          <div class="reto"><b>Gráfica</b><i>Alumni visibles más allá del edificio</i></div>
+          <div class="reto"><b>Informática</b><i>Datos que se actualizan solos</i></div>
+          <div class="reto"><b>Más oficios</b><i>Arte, sonido, vídeo, testing…</i></div>
+        </div>
+      </div>
+
+      <div class="fine">Reserva previa en Eventbrite · Aforo limitado</div>
+    </aside>
+  </main>
+
+  <footer>
+    <div class="fl">
+      <img src="assets/polo-logo-blanco.png" alt="Polo Nacional de Contenidos Digitales">
+      <span class="fx">× Kreatures Studio · Málaga 2026</span>
+    </div>
+    <div class="map">Polo LAB · <a href="https://kreatures-studio.github.io/mapapolo/" target="_blank" rel="noopener">mapa en vivo →</a></div>
+  </footer>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+  const CONFIG = {
+    eventbrite: "https://www.eventbrite.es/e/polo-lab-build-the-next-thing-tickets-2003616001396",
+    form: "",
+    count: "inscritos.json",
+    socials: {
+      whatsapp: "",
+      instagram: "",
+      linkedin: "",
+      x: ""
+    }
+  };
+
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+
+  const toast = $("#toast");
+  let t;
+  function showToast(msg) {
+    toast.textContent = msg;
+    toast.classList.add("show");
+    clearTimeout(t);
+    t = setTimeout(() => toast.classList.remove("show"), 2400);
+  }
+
+  $$("[data-cfg]").forEach(el => {
+    const key = el.dataset.cfg;
+    const url = key === "eventbrite" ? CONFIG.eventbrite : (CONFIG.socials[key] ?? CONFIG[key] ?? "");
+    if (url) {
+      el.href = url;
+      el.target = "_blank";
+      el.rel = "noopener";
+    } else {
+      el.addEventListener("click", e => {
+        e.preventDefault();
+        showToast("Disponible próximamente");
+      });
+    }
+  });
+
+  const target = new Date("2026-10-28T17:30:00+01:00").getTime();
+  const cd = { d: $('[data-cd="d"]'), h: $('[data-cd="h"]'), m: $('[data-cd="m"]'), s: $('[data-cd="s"]') };
+  function tick() {
+    const diff = target - Date.now();
+    if (diff <= 0) {
+      Object.values(cd).forEach(el => el.textContent = "00");
+      $("#liveCount").innerHTML = "<b>El laboratorio está en marcha.</b> ¡Nos vemos en el Polo!";
+      return;
+    }
+    cd.d.textContent = String(Math.floor(diff / 864e5)).padStart(2, "0");
+    cd.h.textContent = String(Math.floor(diff % 864e5 / 36e5)).padStart(2, "0");
+    cd.m.textContent = String(Math.floor(diff % 36e5 / 6e4)).padStart(2, "0");
+    cd.s.textContent = String(Math.floor(diff % 6e4 / 1e3)).padStart(2, "0");
+    setTimeout(tick, 1000);
+  }
+  tick();
+
+  fetch(CONFIG.count, { cache: "no-store" })
+    .then(r => r.ok ? r.json() : null)
+    .then(data => {
+      if (!data || !data.inscritos) return;
+      const date = data.actualizado ? " · actualizado el " + data.actualizado : "";
+      $("#liveCount").innerHTML = "<b>" + data.inscritos + " plazas confirmadas</b>" + date;
+    })
+    .catch(() => {});
+</script>
+</body>
+</html>
